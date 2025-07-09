@@ -42,13 +42,18 @@ except Exception as e:
     print("Sound load error:", e)
     jump_sound = coin_sound = score_sound = gameover_sound = None
 
-# High Score handling
+# High Score handling (safe loading)
 highscore_path = "highscore.txt"
 if not os.path.exists(highscore_path):
     with open(highscore_path, "w") as f:
         f.write("0")
+
 with open(highscore_path, "r") as f:
-    high_score = int(f.read())
+    content = f.read().strip()
+    if content.isdigit():
+        high_score = int(content)
+    else:
+        high_score = 0  # Default if file is empty or invalid
 
 # Draw Text utility
 def draw_text(text, x, y, size=36, color=BLACK):
